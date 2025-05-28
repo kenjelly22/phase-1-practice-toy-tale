@@ -1,6 +1,7 @@
 // GLOBAL VARIBLES
 const toyContainer = document.querySelector("#toy-collection")
 const likeButton = document.querySelector(".like-btn")
+const toysUrl = "http://localhost:3000/toys"
 
 let addToy = false
 
@@ -17,37 +18,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  // FETCH REQUEST
+  // HTTP REQUESTS
 
-  fetch("http://localhost:3000/toys")
+  fetch(toysUrl)
     .then((res) => res.json())
     .then((toys) => {
-      console.log(toys)
       toys.forEach((toy) => renderCollection(toy))
     })
-})
 
-// RENDER FUNCTIONS
-const renderCollection = (toy) => {
-  let card = document.createElement("card")
+  const createNewToy = () => {
+    fetch(toysUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        type: "text",
+        name: "name",
+        value: "",
+        placeholder: "Enter a toy's name...",
+        class: "input-text",
+      }),
+    })
+  }
 
-  card.innerHTML = `
+  // RENDER FUNCTIONS
+  const renderCollection = (toy) => {
+    let card = document.createElement("card")
+    card.innerHTML = `
     <div class="card">
       <h2>${toy.name}</h2>
       <img src="${toy.image}" class="toy-avatar" />
       <p>4 Likes</p>
       <button class="like-btn" id="${toy.id}">Like ❤️</button>
     </div>`
-  toyContainer.appendChild(card)
-}
-
-// Toy Data =
-// Object { id: "1", name: "Woody", image: "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png", likes: 5 }
-// ​
-// id: "1"
-// ​
-// image: "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png"
-// ​
-// likes: 5
-// ​
-// name: "Woody"
+    toyContainer.appendChild(card)
+  }
+})
