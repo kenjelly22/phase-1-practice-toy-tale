@@ -57,36 +57,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // RENDER FUNCTIONS
   const renderCollection = (toy) => {
-    let card = document.createElement("card")
+    let card = document.createElement("div")
+    card.classList.add("card")
     card.innerHTML = `
-    <div class="card">
       <h2>${toy.name}</h2>
       <img src="${toy.image}" class="toy-avatar" />
-      <p>${toy.likes} Likes</p>
-      <button class="like-btn" id="${toy.id}">Like ❤️</button>
-    </div>`
+      <p id="likes">${toy.likes} Likes</p>
+      <button class="like-btn" id="${toy.id}">Like ❤️</button>`
     toyContainer.appendChild(card)
-  }
-  // LIKE BUTTON
 
-  toyContainer.addEventListener("click", (event) => {
-    if ((event.target.classList = "like-btn")) {
-      const toyID = event.target.id
-      const card = document.querySelector(".card")
-      const pLikes = card.querySelector("p")
-      let currentLikes = parseInt(pLikes.innerHTML)
-      currentLikes++
-      pLikes.innerHTML = `${currentLikes} Likes`
-    }
-  })
-})
+    // LIKE BUTTON
+    const likeButtons = document.querySelectorAll(".like-btn")
+    likeButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        const toyId = event.target.id
+      })
+    })
+  }
+}) // End DOMContentLoaded
 
 // When I click the like button
-// I should grab the card ID to identify the card
-// and the current # of Likes
-// the like count should increment by 1 onclick
-// the text on card should update the current # of likes
-// and print: # Likes
+// I should grab the card ID of the card I clicked on
+// I should grab the current # of Likes for that card
+// onclick increment likes by 1
+// show updated like count on card
 
 // Onclick should send Patch request
 // Will update the like count for that card ID
