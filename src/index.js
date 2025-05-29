@@ -1,4 +1,3 @@
-// GLOBAL VARIBLES
 const toyContainer = document.querySelector("#toy-collection")
 const toysUrl = "http://localhost:3000/toys"
 const inputForm = document.querySelector("form")
@@ -10,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#new-toy-btn")
   const toyFormContainer = document.querySelector(".container")
   addBtn.addEventListener("click", () => {
-    // hide & seek with the form
     addToy = !addToy
     if (addToy) {
       toyFormContainer.style.display = "block"
@@ -19,14 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   })
 
-  // GET REQUEST
   fetch(toysUrl)
     .then((res) => res.json())
     .then((toys) => {
       toys.forEach((toy) => renderCollection(toy))
     })
 
-  // POST REQUEST
   const postNewToy = (name, image, likes) => {
     fetch(toysUrl, {
       method: "POST",
@@ -46,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
   }
 
-  // INPUT FORM
   inputForm.addEventListener("submit", (event) => {
     event.preventDefault()
     const name = nameInput.value
@@ -55,31 +50,36 @@ document.addEventListener("DOMContentLoaded", () => {
     postNewToy(name, image, likes)
   })
 
-  // RENDER FUNCTIONS
   const renderCollection = (toy) => {
-    let card = document.createElement("div")
+    const card = document.createElement("div")
     card.classList.add("card")
     card.innerHTML = `
       <h2>${toy.name}</h2>
       <img src="${toy.image}" class="toy-avatar" />
-      <p class="likes">${toy.likes} Likes</p>
-      <button class="like-btn" id="${toy.id}">Like ❤️</button>`
+      <p class="likes">${toy.likes} Likes</p>`
+    const likeButton = document.createElement("button")
+    likeButton.classList.add("like-button")
+    likeButton.id = `${toy.id}`
+    likeButton.textContent = "Like ❤️"
     toyContainer.appendChild(card)
-    // console.log(toy)
+    card.appendChild(likeButton)
 
-    // LIKE BUTTON
-    const likeButton = card.querySelector(".like-btn")
+    const likeText = card.querySelector(".likes")
     likeButton.addEventListener("click", () => {
       toy.likes++
+      likeText.innerText = `${toy.likes} Likes`
+      fetch(`http://localhost:3000/toys/${toy.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          likes: toy.likes,
+        }),
+      })
+        .then((response) => response.json())
+        .then(console.log)
+        .catch((error) => console.error("Error:", error))
     })
   }
-}) // End DOMContentLoaded
-
-// When I click the like button
-// I should grab the card ID of the card I clicked on
-// I should grab the current # of Likes for that card
-// onclick increment likes by 1
-// show updated like count on card
-
-// Onclick should send Patch request
-// Will update the like count for that card ID
+})
