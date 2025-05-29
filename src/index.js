@@ -62,16 +62,15 @@ document.addEventListener("DOMContentLoaded", () => {
     card.innerHTML = `
       <h2>${toy.name}</h2>
       <img src="${toy.image}" class="toy-avatar" />
-      <p id="likes">${toy.likes} Likes</p>
+      <p class="likes">${toy.likes} Likes</p>
       <button class="like-btn" id="${toy.id}">Like ❤️</button>`
     toyContainer.appendChild(card)
+    // console.log(toy)
 
     // LIKE BUTTON
-    const likeButtons = document.querySelectorAll(".like-btn")
-    likeButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        const toyId = event.target.id
-      })
+    const likeButton = card.querySelector(".like-btn")
+    likeButton.addEventListener("click", () => {
+      toy.likes++
     })
   }
 }) // End DOMContentLoaded
